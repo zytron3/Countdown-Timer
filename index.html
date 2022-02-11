@@ -4,8 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clock App</title>
+  <script>
+      function zfill(number, size) {
+        number = number.toString();
+        while (number.length < size) number = "0" + number;
+        return number;
+        }
+      let currentClock;
+      let increasing;
+      let pad = "00";
+      function clockModeClock() {
+          currentClock = new Date();
+          increasing = true;
+      }
+      function clockModeStopWatch() {
+          currentClock = new Date(2020, 0, 1, 0, 0, 0, 0);
+          increasing = true;
+          console.log("updated currentClock to " + currentClock);
+      }
+      function clockModeCountdown() {
+          currentClock = new Date(2020, 5, 3, document.getElementById("countdown-hours").value, document.getElementById("countdown-minutes").value, document.getElementById("countdown-seconds").value, 0);
+          increasing = false;
+          console.log("updated currentClock to " + currentClock);
+      }
+      clockModeClock();
+      let change;
+      function updateClock() {
+        if (increasing) change = 1;
+        else change = -1;
+        currentClock.setSeconds(currentClock.getSeconds() + change);
+        document.getElementById("clock").innerHTML = zfill(currentClock.getHours(), 2) + ":" + zfill(currentClock.getMinutes(), 2) + ":" + zfill(currentClock.getSeconds(), 2);
+      }
+      setInterval(updateClock, 1000);
+
+      
+  </script>
  </head>
  <body>
-  <h1>You did it!</h1>
+  <h1>Big Clock</h1>
+  <div id="clock"></div>
+  <button onclick="clockModeClock()">Clock</button>
+  <button onclick="clockModeStopWatch()">Stopwatch</button>
+  
+  <form>
+      <label for="countdown-hours">Countdown Hours</label>
+      <input type="number" min="0" max="23" id="countdown-hours" placeholder="0">
+      <label for="countdown-minutes">Countdown Minutes</label>
+      <input type="number" min="0" max="59" id="countdown-minutes" placeholder="0">
+      <label for="countdown-seconds">Countdown Seconds</label>
+      <input type="number" min="0" max="59" id="countdown-seconds" placeholder="0">
+      
+  </form>
+  <button onclick="clockModeCountdown()">Countdown</button>
  </body>
 </html>
